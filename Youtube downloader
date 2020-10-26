@@ -1,1 +1,31 @@
 
+from pytube import YouTube
+ 
+ #Please enter video url here
+youtube_video_url = 'sample'
+
+def progress_function(stream, chunk,bytes_remaining):
+    print(round((1-bytes_remaining/filters.filesize)*100, 3), '% done...')
+ 
+try:
+    yt_obj = YouTube(youtube_video_url,on_progress_callback=progress_function)
+    title=str(yt_obj.title)
+    
+    filters = yt_obj.streams.filter(progressive=True ,file_extension='mp4')
+    
+    print("Video title : "+title)
+    
+    choice=int(input( 'Enter 1 for Video and 2 for audio:  '))
+    
+    if choice== 1:
+    	# download the highest quality video
+  	  filters.get_highest_resolution().download()
+  	  
+  	  print('Video Downloaded Successfully')
+    if choice==2:
+		
+    	#download audio only
+    	yt_obj.streams.get_audio_only().download(filename=title)
+    	print('YouTube audio downloaded successfully')
+except Exception as e:
+    print(e)
